@@ -10,6 +10,9 @@ BUILD_BROKEN_DUP_RULES := true
 
 DEVICE_PATH := device/xiaomi/raphael
 
+# Compile libhwui in performance mode
+HWUI_COMPILE_FOR_PERF := true
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
