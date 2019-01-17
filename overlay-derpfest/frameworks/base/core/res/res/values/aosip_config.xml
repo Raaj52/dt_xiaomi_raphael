@@ -22,4 +22,8 @@
     <!-- Shows the required view for in-display fingerprint -->
     <bool name="config_needCustomFODView">true</bool>
 
+    <!-- Max visible notification icons -->
+    <integer name="config_maxVisibleNotificationIcons">5</integer>
+    <integer name="config_maxVisibleNotificationIconsWhenDark">6</integer>
+
 </resources>
