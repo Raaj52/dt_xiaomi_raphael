@@ -101,13 +101,6 @@ public class PopupCameraService extends Service {
             if (android.content.Intent.ACTION_CAMERA_STATUS_CHANGED.equals(action)) {
                mCameraState = intent.getExtras().getString(android.content.Intent.EXTRA_CAMERA_STATE);
                updateMotor(mCameraState);
-            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                try {
-                    IDisplayFeature mDisplayFeature = IDisplayFeature.getService();
-                    mDisplayFeature.setFeature(0, 0, 2, 255);
-                    mDisplayFeature.setFeature(0, 3, 0, 255);
-                } catch(Exception e) {
-                }
             }
         }
     };

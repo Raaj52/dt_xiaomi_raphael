@@ -25,6 +25,7 @@ import android.util.Log;
 import org.chaldeastudio.deviceparts.dirac.DiracUtils;
 import org.chaldeastudio.deviceparts.doze.DozeUtils;
 import org.chaldeastudio.deviceparts.popupcamera.PopupCameraUtils;
+import org.chaldeastudio.deviceparts.fod.FodUtils;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 
@@ -39,5 +40,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         }
         new DiracUtils(context).onBootCompleted();
         PopupCameraUtils.startService(context);
+        FodUtils.startService(context);
     }
 }
