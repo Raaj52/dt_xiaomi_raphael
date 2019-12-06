@@ -48,6 +48,7 @@ import java.util.List;
 
 import vendor.xiaomi.hardware.displayfeature.V1_0.IDisplayFeature;
 import org.chaldeastudio.deviceparts.R;
+import org.chaldeastudio.deviceparts.utils.FileUtils;
 import org.chaldeastudio.deviceparts.utils.LimitSizeList;
 
 import vendor.xiaomi.hardware.motor.V1_0.IMotor;
