@@ -98,6 +98,7 @@ void vendor_load_properties() {
     property_override("ro.control_privapp_permissions", "log");
     property_override("persist.bluetooth.a2dp_offload.disabled", "true");
     property_override("persist.bluetooth.bluetooth_audio_hal.disabled", "true");
+    property_override("ro.apex.updatable", "true");
 
     load_dalvikvm_properties();
 }
