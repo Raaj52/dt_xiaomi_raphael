@@ -40,3 +40,5 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 BUILD_FINGERPRINT := google/walleye/walleye:8.1.0/OPM1.171019.021/4565141:user/release-keys
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
+
+$(call inherit-product, vendor/MiuiCamera/config.mk)
