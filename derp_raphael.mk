@@ -26,3 +26,6 @@ TARGET_BOOT_ANIMATION_RES := 1080
 IS_PHONE := true
 TARGET_MINIMAL_APPS := false
 TARGET_INCLUDE_STOCK_ARCORE := true
+
+# Inherit from custom vendor
+$(call inherit-product, vendor/MiuiCamera/config.mk)
