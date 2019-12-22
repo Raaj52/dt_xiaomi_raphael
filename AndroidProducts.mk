@@ -5,4 +5,8 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lineage_raphael.mk
+    $(LOCAL_DIR)/aosip_raphael.mk
+
+COMMON_LUNCH_CHOICES := \
+    aosip_raphael-userdebug \
+    aosip_raphael-eng

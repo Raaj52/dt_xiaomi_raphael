@@ -13,6 +13,7 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
 LOCAL_PACKAGE_NAME := XiaomiParts
+LOCAL_OVERRIDES_PACKAGES := CustomDoze
 LOCAL_CERTIFICATE := platform
 LOCAL_PRIVATE_PLATFORM_APIS := true
 LOCAL_PRIVILEGED_MODULE := true
@@ -24,7 +25,6 @@ LOCAL_STATIC_ANDROID_LIBRARIES := \
     androidx.preference_preference
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
-    org.lineageos.platform.internal \
     vendor.xiaomi.hardware.displayfeature-V1.0-java \
     vendor.xiaomi.hardware.motor-V1.0-java
 

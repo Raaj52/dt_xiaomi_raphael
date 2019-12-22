@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-package org.lineageos.settings;
+package org.chaldeastudio.deviceparts;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import org.lineageos.settings.dirac.DiracUtils;
-import org.lineageos.settings.doze.DozeUtils;
-import org.lineageos.settings.popupcamera.PopupCameraUtils;
+import org.chaldeastudio.deviceparts.dirac.DiracUtils;
+import org.chaldeastudio.deviceparts.doze.DozeUtils;
+import org.chaldeastudio.deviceparts.popupcamera.PopupCameraUtils;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 
