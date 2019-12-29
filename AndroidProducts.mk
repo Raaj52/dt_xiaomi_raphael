@@ -5,8 +5,8 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/aosip_raphael.mk
+    $(LOCAL_DIR)/derp_raphael.mk
 
 COMMON_LUNCH_CHOICES := \
-    aosip_raphael-userdebug \
-    aosip_raphael-eng
+    derp_raphael-userdebug \
+    derp_raphael-eng

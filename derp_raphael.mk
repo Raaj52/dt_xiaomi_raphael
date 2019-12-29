@@ -10,7 +10,7 @@ $(call inherit-product, device/xiaomi/raphael/device.mk)
 $(call inherit-product, vendor/aosip/config/common_full_phone.mk)
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := aosip_raphael
+PRODUCT_NAME := derp_raphael
 PRODUCT_DEVICE := raphael
 PRODUCT_BRAND := Xiaomi
 PRODUCT_MODEL := Redmi K20 Pro
