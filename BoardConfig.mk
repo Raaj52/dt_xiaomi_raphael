@@ -7,6 +7,7 @@
 BOARD_VENDOR := xiaomi
 
 BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_USES_NETWORK := true
 
 DEVICE_PATH := device/xiaomi/raphael
 
