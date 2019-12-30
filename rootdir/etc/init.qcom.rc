@@ -17,3 +17,6 @@ service vendor.imsdatadaemon /vendor/bin/imsdatadaemon
 
 on property:init.svc.vendor.ipacm-diag=running
     stop vendor.ipacm-diag
+
+on property:init.svc.vendor.cnss_diag=running
+    stop vendor.cnss_diag
