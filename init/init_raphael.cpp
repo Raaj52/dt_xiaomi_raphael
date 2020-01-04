@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
+#include <sys/sysinfo.h>
 
 #include <android-base/properties.h>
 #include "property_service.h"
@@ -53,6 +54,28 @@ void property_override_dual(char const system_prop[], char const vendor_prop[],
     property_override(vendor_prop, value);
 }
 
+void load_dalvikvm_properties()
+{
+    struct sysinfo sys;
+
+    sysinfo(&sys);
+    if (sys.totalram < 7000ull * 1024 * 1024) {
+        // 4/6GB RAM
+        property_override("dalvik.vm.heapstartsize", "16m");
+        property_override("dalvik.vm.heaptargetutilization", "0.5");
+        property_override("dalvik.vm.heapmaxfree", "32m");
+    } else {
+        // 8/12/16GB RAM
+        property_override("dalvik.vm.heapstartsize", "24m");
+        property_override("dalvik.vm.heaptargetutilization", "0.46");
+        property_override("dalvik.vm.heapmaxfree", "48m");
+    }
+
+    property_override("dalvik.vm.heapgrowthlimit", "256m");
+    property_override("dalvik.vm.heapsize", "512m");
+    property_override("dalvik.vm.heapminfree", "8m");
+}
+
 void vendor_load_properties()
 {
     std::string region = android::base::GetProperty("ro.boot.hwc", "");
@@ -64,4 +87,6 @@ void vendor_load_properties()
     } else {
         property_override("ro.product.model", "Mi 9T Pro");
     }
+
+    load_dalvikvm_properties();
 }
