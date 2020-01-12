@@ -15,9 +15,6 @@ on init
     chown system system /dev/stune/camera-daemon/tasks
     chmod 0660 /dev/stune/camera-daemon/tasks
 
-on boot
-    write /sys/class/thermal/thermal_message/sconfig 10
-
 service citsensor-hal-1-1  /vendor/bin/hw/vendor.xiaomi.hardware.citsensorservice@1.1-service
     override
     class late_start
