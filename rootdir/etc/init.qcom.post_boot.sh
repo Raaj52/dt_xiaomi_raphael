@@ -4568,8 +4568,13 @@ case "$target" in
 	echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
 
 	# cpuset parameters
-	echo 0-3 > /dev/cpuset/background/cpus
+	echo 1-2 > /dev/cpuset/audio-app/cpus
+	echo 0-1 > /dev/cpuset/background/cpus
+	echo 0-7 > /dev/cpuset/camera-daemon/cpus
+	echo 0-3,5-6 > /dev/cpuset/foreground/cpus
+	echo 0-3 > /dev/cpuset/restricted/cpus
 	echo 0-3 > /dev/cpuset/system-background/cpus
+	echo 0-7 > /dev/cpuset/top-app/cpus
 
 	# Turn off scheduler boost at the end
 	echo 0 > /proc/sys/kernel/sched_boost
@@ -4603,9 +4608,6 @@ case "$target" in
 	# Disable wsf, beacause we are using efk.
 	# wsf Range : 1..1000 So set to bare minimum value 1.
         echo 1 > /proc/sys/vm/watermark_scale_factor
-
-        echo 0-3 > /dev/cpuset/background/cpus
-        echo 0-3 > /dev/cpuset/system-background/cpus
 
         # Enable oom_reaper
 	if [ -f /sys/module/lowmemorykiller/parameters/oom_reaper ]; then
