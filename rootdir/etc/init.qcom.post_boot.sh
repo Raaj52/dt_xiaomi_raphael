@@ -4739,6 +4739,10 @@ case "$target" in
            configure_automotive_sku_parameters
 	fi
 
+    # Setup Writeback
+    echo 80 > /proc/sys/vm/dirty_ratio
+    echo 8 > /proc/sys/vm/dirty_background_ratio
+
     ;;
 esac
 
