@@ -4616,6 +4616,9 @@ case "$target" in
 		echo 1 > /proc/sys/vm/reap_mem_on_sigkill
 	fi
 
+    # Disable sched autogroup
+    echo 0 > /proc/sys/kernel/sched_autogroup_enabled
+
 	# Enable bus-dcvs
 	for device in /sys/devices/platform/soc
 	do
