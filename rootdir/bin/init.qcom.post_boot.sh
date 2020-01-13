@@ -176,6 +176,9 @@ case "$target" in
     # wsf Range : 1..1000 So set to bare minimum value 1.
     echo 1 > /proc/sys/vm/watermark_scale_factor
 
+    # Disable sched autogroup
+    echo 0 > /proc/sys/kernel/sched_autogroup_enabled
+
     # Enable bus-dcvs
     for device in /sys/devices/platform/soc
     do
