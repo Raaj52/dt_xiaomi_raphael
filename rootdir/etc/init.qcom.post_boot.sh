@@ -4740,8 +4740,9 @@ case "$target" in
 	fi
 
     # Setup Writeback
-    echo 80 > /proc/sys/vm/dirty_ratio
-    echo 8 > /proc/sys/vm/dirty_background_ratio
+    echo 10 > /proc/sys/vm/dirty_background_ratio
+    echo 3000 > /proc/sys/vm/dirty_expire_centisecs
+    echo 32768 > /proc/sys/vm/min_free_kbytes
 
     ;;
 esac
