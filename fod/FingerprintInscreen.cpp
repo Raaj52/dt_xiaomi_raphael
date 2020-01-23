@@ -25,7 +25,6 @@
 
 #define COMMAND_NIT 10
 #define PARAM_NIT_630_FOD 1
-#define PARAM_NIT_300_FOD 4
 #define PARAM_NIT_NONE 0
 
 #define FOD_STATUS_PATH "/sys/devices/virtual/touch/tp_dev/fod_status"
@@ -115,7 +114,7 @@ Return<int32_t> FingerprintInscreen::getSize() {
     if (result < 1) {
         return FOD_SENSOR_SIZE;
     }
-    
+
     return result;
 }
 
@@ -129,25 +128,16 @@ Return<void> FingerprintInscreen::onFinishEnroll() {
 
 Return<void> FingerprintInscreen::onPress() {
     xiaomiDisplayFeatureService->setFeature(0, 11, 1, 4);
-    if (get(BRIGHTNESS_PATH, 0) > 100) {
-        xiaomiFingerprintService->extCmd(COMMAND_NIT, PARAM_NIT_630_FOD);
-        xiaomiDisplayFeatureService->setFeature(0, 11, 1, 3);
-    } else if (get(BRIGHTNESS_PATH, 0) != 0) {
-        xiaomiFingerprintService->extCmd(COMMAND_NIT, PARAM_NIT_300_FOD);
-        xiaomiDisplayFeatureService->setFeature(0, 11, 1, 5);
-    }
+    xiaomiDisplayFeatureService->setFeature(0, 11, 1, 3);
+    xiaomiFingerprintService->extCmd(COMMAND_NIT, PARAM_NIT_630_FOD);
 
     return Void();
 }
 
 Return<void> FingerprintInscreen::onRelease() {
+    xiaomiDisplayFeatureService->setFeature(0, 11, 0, 3);
     xiaomiFingerprintService->extCmd(COMMAND_NIT, PARAM_NIT_NONE);
-    if (get(BRIGHTNESS_PATH, 0) > 100) {
-        xiaomiDisplayFeatureService->setFeature(0, 11, 0, 3);
-    } else if (get(BRIGHTNESS_PATH, 0) != 0) {
-        xiaomiDisplayFeatureService->setFeature(0, 11, 1, 4);
-        xiaomiDisplayFeatureService->setFeature(0, 11, 0, 5);
-    }
+
     return Void();
 }
 
@@ -161,29 +151,10 @@ Return<void> FingerprintInscreen::onShowFODView() {
 Return<void> FingerprintInscreen::onHideFODView() {
     set(FOD_STATUS_PATH, FOD_STATUS_OFF);
     xiaomiDisplayFeatureService->setFeature(0, 17, 0, 255);
-    xiaomiFingerprintService->extCmd(COMMAND_NIT, PARAM_NIT_NONE);
-    if (get(BRIGHTNESS_PATH, 0) > 100) {
-        xiaomiDisplayFeatureService->setFeature(0, 11, 0, 3);
-    } else if (get(BRIGHTNESS_PATH, 0) != 0) {
-        xiaomiDisplayFeatureService->setFeature(0, 11, 1, 4);
-        xiaomiDisplayFeatureService->setFeature(0, 11, 0, 5);
-    }
     return Void();
 }
 
 Return<bool> FingerprintInscreen::handleAcquired(int32_t acquiredInfo, int32_t vendorCode) {
-    if (acquiredInfo == 0) {
-        if (vendorCode == 0) {
-            if (get(BRIGHTNESS_PATH, 0) > 100) {
-                xiaomiDisplayFeatureService->setFeature(0, 11, 0, 3);
-            } else if (get(BRIGHTNESS_PATH, 0) != 0) {
-                xiaomiDisplayFeatureService->setFeature(0, 11, 1, 4);
-                xiaomiDisplayFeatureService->setFeature(0, 11, 0, 5);
-            }
-            return true;
-        }
-    }
-
     LOG(ERROR) << "acquiredInfo: " << acquiredInfo << ", vendorCode: " << vendorCode << "\n";
     return false;
 }
