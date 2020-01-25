@@ -28,5 +28,8 @@ TARGET_MINIMAL_APPS := false
 TARGET_INCLUDE_STOCK_ARCORE := true
 TARGET_SUPPORTS_GOOGLE_RECORDER := false
 
+# Official-ify
+DERP_BUILDTYPE := Official
+
 # Inherit from custom vendor
 $(call inherit-product, vendor/MiuiCamera/config.mk)
