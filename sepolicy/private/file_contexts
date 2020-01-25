@@ -4,6 +4,9 @@
 /firmware(/.*)?          u:object_r:firmware_file:s0
 /persist(/.*)?           u:object_r:persist_file:s0
 
+# Backlight
+/sys/devices/platform/soc/ae00000\.qcom\,mdss_mdp/backlight/panel0-backlight/brightness_clone   u:object_r:sysfs_graphics:s0
+
 # Fingerprint nodes
 /sys/devices/virtual/touch/tp_dev/fod_status    u:object_r:sysfs_tp_fodstatus:s0
 
