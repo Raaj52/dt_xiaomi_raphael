@@ -18,6 +18,9 @@ $(call inherit-product, device/xiaomi/raphael/msmnile.mk)
 # Inherit some common ROM stuff.
 $(call inherit-product, vendor/aosip/config/common_full_phone.mk)
 
+# Official-ify
+DERP_BUILDTYPE := Official
+
 # Setup Gapps options
 IS_PHONE := true
 TARGET_BOOT_ANIMATION_RES := 1080
