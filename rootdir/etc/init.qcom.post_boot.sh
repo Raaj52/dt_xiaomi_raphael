@@ -4726,6 +4726,11 @@ case "$target" in
         ;;
     esac
 
+    # Setup gpu freq
+    echo 0 > /sys/class/kgsl/kgsl-3d0/max_pwrlevel
+    echo 3 > /sys/class/kgsl/kgsl-3d0/default_pwrlevel
+    echo 3 > /sys/class/kgsl/kgsl-3d0/min_pwrlevel
+
     echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
     configure_memory_parameters
     target_type=`getprop ro.hardware.type`
