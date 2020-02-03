@@ -262,6 +262,11 @@ case "$target" in
         done
     done
 
+    # Setup gpu freq
+    echo 0 > /sys/class/kgsl/kgsl-3d0/max_pwrlevel
+    echo 3 > /sys/class/kgsl/kgsl-3d0/default_pwrlevel
+    echo 3 > /sys/class/kgsl/kgsl-3d0/min_pwrlevel
+
     # Setup readahead
     find /sys/devices -name read_ahead_kb | while read node; do echo 128 > $node; done
 
