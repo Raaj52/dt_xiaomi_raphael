@@ -82,4 +82,7 @@
     <string name="fod_screenoff_title">Screen Off Fingerprint Scan</string>
     <string name="fod_screenoff_summary">Allow to press the scanner area and pulsing when screen is off (much slower than on the lock screen)</string>
 
+     <!-- FPS Counter -->
+    <string name="fps_info_title">FPS Counter</string>
+
 </resources>
