@@ -9,3 +9,7 @@
 -keep class org.chaldeastudio.deviceparts.popupcamera.* {
   *;
 }
+
+-keep class org.chaldeastudio.deviceparts.KeyHandler {
+  *;
+}
