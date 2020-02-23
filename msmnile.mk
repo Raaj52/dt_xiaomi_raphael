@@ -165,6 +165,7 @@ PRODUCT_PACKAGES += \
 
 # Fingerprint
 PRODUCT_PACKAGES += \
+    gfscreenoffd \
     vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.xiaomi_raphael
 
 PRODUCT_COPY_FILES += \
