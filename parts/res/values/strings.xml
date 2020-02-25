@@ -92,4 +92,12 @@
     <string name="raise_to_wake_gesture_title">Raise to wake</string>
     <string name="raise_to_wake_gesture_summary">Wake up the device instead of pulsing notification</string>
 
+     <!-- FOD Settings strings-->
+    <string name="fod_settings_title">In-display fingerprint</string>
+    <string name="fod_settings_summary">More in-display fingerprint settings</string>
+
+     <!-- FOD Screen Off Pulse strings-->
+    <string name="fod_screenoff_title">Screen Off Fingerprint Scan</string>
+    <string name="fod_screenoff_summary">Allow to press the scanner area and pulsing when screen is off (much slower than on the lock screen)</string>
+
 </resources>
