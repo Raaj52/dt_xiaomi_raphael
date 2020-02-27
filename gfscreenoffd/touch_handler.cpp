@@ -61,12 +61,13 @@ void SendResetState(const int duration) {
 }
 
 void Listen(const std::string& eventPath, const ListenerCallback& callback) {
-    int fodstat, fodstatfd, evfd;
+    char fodstat;
+    int fodstatfd, evfd;
     pollfd pfd;
     input_event ev;
 
     evfd = open(eventPath.c_str(), O_RDONLY | O_NONBLOCK);
-    fodstatfd = open(fodStatusPath, O_WRONLY | O_NONBLOCK);
+    fodstatfd = open(fodStatusPath, O_RDWR | O_NONBLOCK);
 
     pfd.fd = evfd;
     pfd.events = POLLIN;
@@ -74,8 +75,17 @@ void Listen(const std::string& eventPath, const ListenerCallback& callback) {
 
     while (true) {
         // unblock touch listener by enabling fod_status
-        fodstat = 1;
-        write(fodstatfd, &fodstat, 1);
+        if (lseek(fodstatfd, 0, SEEK_SET) != -1) {
+            if (read(fodstatfd, &fodstat, 1) < 0) {
+                LOG(ERROR) << "Unable to read fod_status, exiting.";
+                goto out;
+            }
+            if (fodstat == '0') {
+                LOG(INFO) << "FOD Touch listener is disabled, enabling.";
+                fodstat = '1';
+                write(fodstatfd, &fodstat, 1);
+            }
+        }
 
         poll(&pfd, 1, -1);
         if (!(pfd.revents & POLLIN)) {
