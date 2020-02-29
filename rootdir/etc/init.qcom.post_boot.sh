@@ -33,39 +33,47 @@ if [ "$(getprop ro.board.platform)" != "msmnile" ]; then
     exit 1
 fi
 
-# Core control parameters for gold
-echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
-echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
-echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
-echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
+if [ -f /proc/sys/kernel/sched_walt_rotate_big_tasks ]; then
+    walt_available=1
+else
+    walt_available=0
+fi
 
-# Core control parameters for gold+
-echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
-echo 60 > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
-echo 30 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
-echo 100 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
-echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/task_thres
+if [ "$walt_available" != 0 ]; then
+    # Core control parameters for gold
+    echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+    echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
+    echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
+    echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
 
-# Controls how many more tasks should be eligible to run on gold CPUs
-# w.r.t number of gold CPUs available to trigger assist (max number of
-# tasks eligible to run on previous cluster minus number of CPUs in
-# the previous cluster).
-#
-# Setting to 1 by default which means there should be at least
-# 4 tasks eligible to run on gold cluster (tasks running on gold cores
-# plus misfit tasks on silver cores) to trigger assitance from gold+.
-echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/nr_prev_assist_thresh
+    # Core control parameters for gold+
+    echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+    echo 60 > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
+    echo 30 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
+    echo 100 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
+    echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/task_thres
 
-# Disable Core control on silver
-echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
+    # Controls how many more tasks should be eligible to run on gold CPUs
+    # w.r.t number of gold CPUs available to trigger assist (max number of
+    # tasks eligible to run on previous cluster minus number of CPUs in
+    # the previous cluster).
+    #
+    # Setting to 1 by default which means there should be at least
+    # 4 tasks eligible to run on gold cluster (tasks running on gold cores
+    # plus misfit tasks on silver cores) to trigger assitance from gold+.
+    echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/nr_prev_assist_thresh
 
-# Setting b.L scheduler parameters
-echo 95 95 > /proc/sys/kernel/sched_upmigrate
-echo 85 85 > /proc/sys/kernel/sched_downmigrate
-echo 100 > /proc/sys/kernel/sched_group_upmigrate
-echo 10 > /proc/sys/kernel/sched_group_downmigrate
-echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
+    # Disable Core control on silver
+    echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
+
+    # Setting b.L scheduler parameters
+    echo 95 95 > /proc/sys/kernel/sched_upmigrate
+    echo 85 85 > /proc/sys/kernel/sched_downmigrate
+    echo 100 > /proc/sys/kernel/sched_group_upmigrate
+    echo 10 > /proc/sys/kernel/sched_group_downmigrate
+    echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
+fi
 
 # cpuset parameters
 echo 1-2 > /dev/cpuset/audio-app/cpus
@@ -76,29 +84,46 @@ echo 0-3 > /dev/cpuset/restricted/cpus
 echo 0-3 > /dev/cpuset/system-background/cpus
 echo 0-7 > /dev/cpuset/top-app/cpus
 
-# Turn off scheduler boost at the end
-echo 0 > /proc/sys/kernel/sched_boost
+if [ "$walt_available" != 0 ]; then
+    # Turn off scheduler boost at the end
+    echo 0 > /proc/sys/kernel/sched_boost
+fi
 
 # configure governor settings for silver cluster
 echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
 echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/up_rate_limit_us
 echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
-echo 1209600 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
-echo 1 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/pl
+if [ "$walt_available" != 0 ]; then
+    echo 1209600 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
+    echo 1 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/pl
+else
+    echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
+    echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/pl
+fi
 
 # configure governor settings for gold cluster
 echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
 echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/up_rate_limit_us
 echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/down_rate_limit_us
-echo 1612800 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
-echo 1 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/pl
+if [ "$walt_available" != 0 ]; then
+    echo 1612800 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
+    echo 1 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/pl
+else
+    echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
+    echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/pl
+fi
 
 # configure governor settings for gold+ cluster
 echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy7/scaling_governor
 echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/up_rate_limit_us
 echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/down_rate_limit_us
-echo 1612800 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
-echo 1 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/pl
+if [ "$walt_available" != 0 ]; then
+    echo 1612800 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
+    echo 1 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/pl
+else
+    echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
+    echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/pl
+fi
 
 # configure input boost settings
 echo "0:1036800" > /sys/module/cpu_boost/parameters/input_boost_freq
