@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
+#define LOG_TAG "gfscreenoffd"
 
 #include "touch_handler.h"
 
