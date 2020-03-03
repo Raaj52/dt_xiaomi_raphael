@@ -12,6 +12,7 @@
 
 static constexpr const char* fodStatusPath = "/sys/devices/virtual/touch/tp_dev/fod_status";
 static constexpr const char* fodTestPath = "/sys/devices/virtual/touch/tp_dev/fod_test";
+static constexpr const char* fblankPath = "/sys/class/backlight/panel0-backlight/bl_power";
 
 namespace vendor {
 namespace chaldeastudio {
