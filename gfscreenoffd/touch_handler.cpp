@@ -4,6 +4,7 @@
 
 #include <android-base/logging.h>
 #include <fcntl.h>
+#include <linux/fb.h>
 #include <linux/input.h>
 #include <poll.h>
 #include <unistd.h>
@@ -62,18 +63,31 @@ void SendResetState(const int duration) {
 
 void Listen(const std::string& eventPath, const ListenerCallback& callback) {
     char fodstat;
-    int fodstatfd, evfd;
+    int fodstatfd, evfd, fblank, fblankfd;
     pollfd pfd;
     input_event ev;
 
     evfd = open(eventPath.c_str(), O_RDONLY | O_NONBLOCK);
     fodstatfd = open(fodStatusPath, O_RDWR | O_NONBLOCK);
+    fblankfd = open(fblankPath, O_RDONLY | O_NONBLOCK);
 
     pfd.fd = evfd;
     pfd.events = POLLIN;
     pfd.revents = 0;
 
     while (true) {
+        usleep(10000);
+        if (lseek(fblankfd, 0, SEEK_SET) != -1) {
+            if (read(fblankfd, &fblank, sizeof(fblank)) < 0) {
+                LOG(ERROR) << "Unable to read blank state, exiting.";
+                goto out;
+            }
+            if (fblank <= FB_BLANK_NORMAL) {
+                usleep(100000);
+                continue;
+            }
+        }
+
         // unblock touch listener by enabling fod_status
         if (lseek(fodstatfd, 0, SEEK_SET) != -1) {
             if (read(fodstatfd, &fodstat, 1) < 0) {
@@ -102,6 +116,7 @@ void Listen(const std::string& eventPath, const ListenerCallback& callback) {
 
 out:
     close(fodstatfd);
+    close(fblankfd);
     close(evfd);
 }
 
