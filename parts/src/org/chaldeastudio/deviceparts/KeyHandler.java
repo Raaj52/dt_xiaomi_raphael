@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.UserHandle;
-import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -40,8 +39,6 @@ public class KeyHandler implements DeviceKeyHandler {
 
     private static final int KEY_FOD_GESTURE_DOWN = 745;
     private static final String DOZE_INTENT = "com.android.systemui.doze.pulse";
-    private static final String FOD_SCRNOFFD_PROP = "persist.sys.gfscreenoffd.run";
-    private static final String FOD_SCRNOFF_SETTING_KEY = "fod_screenoff_enable";
 
     private static final int[] sSupportedGestures = new int[]{
         KEY_FOD_GESTURE_DOWN
@@ -58,14 +55,8 @@ public class KeyHandler implements DeviceKeyHandler {
          public void onReceive(Context context, Intent intent) {
              if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                  mInteractive = true;
-                if (isFodScreenOffEnabled()) {
-                    listenFodScreenOff(false);
-                }
              } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                  mInteractive = false;
-                if (isFodScreenOffEnabled()) {
-                    listenFodScreenOff(true);
-                }
              }
          }
     };
@@ -85,26 +76,6 @@ public class KeyHandler implements DeviceKeyHandler {
                 Settings.Secure.USER_SETUP_COMPLETE, 0) != 0;
     }
 
-    private boolean isFodScreenOffEnabled() {
-        try {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                FOD_SCRNOFF_SETTING_KEY, UserHandle.USER_CURRENT) != 0;
-        } catch(Exception e) {
-            return false;
-        }
-    }
-
-    private void listenFodScreenOff(boolean enable) {
-        boolean running = SystemProperties.getInt(FOD_SCRNOFFD_PROP, 0) != 0;
-
-        if (enable && running) {
-            if (DEBUG) Log.i(TAG, "gfscreenoffd already running");
-            return;
-        }
-
-        SystemProperties.set(FOD_SCRNOFFD_PROP, enable ? "1" : "0");
-    }
-
     private void launchDozePulse() {
         if (DEBUG) Log.i(TAG, "Doze pulse");
         mContext.sendBroadcastAsUser(new Intent(DOZE_INTENT),
@@ -112,7 +83,7 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     private void handleFODScreenOff(int eventCode) {
-        if (!isFodScreenOffEnabled() && mInteractive) {
+        if (mInteractive) {
             return;
         }
 
@@ -132,7 +103,7 @@ public class KeyHandler implements DeviceKeyHandler {
         if (event.getAction() != KeyEvent.ACTION_UP) {
             return false;
         }
-        
+
         handleFODScreenOff(event.getScanCode());
 
         return ArrayUtils.contains(sSupportedGestures, event.getScanCode());
