@@ -22,7 +22,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.os.SystemProperties;
 import android.util.Log;
+import androidx.preference.PreferenceManager;
 
 import vendor.xiaomi.hardware.displayfeature.V1_0.IDisplayFeature;
 
@@ -30,6 +32,25 @@ public class FodService extends Service {
 
     private static final String TAG = "FodService";
     private static final boolean DEBUG = false;
+
+    private static final String FOD_SCRNOFF_SETTING_KEY = "fod_screenoff_enable";
+    private static final String FOD_SCRNOFFD_PROP = "persist.sys.gfscreenoffd.run";
+
+    private static boolean isFodScreenOffEnabled(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(FOD_SCRNOFF_SETTING_KEY, false);
+    }
+
+    private void listenFodScreenOff(boolean enable) {
+        boolean running = SystemProperties.getInt(FOD_SCRNOFFD_PROP, 0) != 0;
+
+        if (enable && running) {
+            if (DEBUG) Log.i(TAG, "gfscreenoffd already running");
+            return;
+        }
+
+        SystemProperties.set(FOD_SCRNOFFD_PROP, enable ? "1" : "0");
+    }
 
     @Override
     public void onCreate() {
@@ -57,6 +78,7 @@ public class FodService extends Service {
     private void registerReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
         this.registerReceiver(mIntentReceiver, filter);
     }
 
@@ -70,6 +92,14 @@ public class FodService extends Service {
                     mDisplayFeature.setFeature(0, 0, 2, 255);
                     mDisplayFeature.setFeature(0, 3, 0, 255);
                 } catch(Exception e) {
+                }
+
+                if (isFodScreenOffEnabled(context)) {
+                    listenFodScreenOff(false);
+                }
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                if (isFodScreenOffEnabled(context)) {
+                    listenFodScreenOff(true);
                 }
             }
         }
