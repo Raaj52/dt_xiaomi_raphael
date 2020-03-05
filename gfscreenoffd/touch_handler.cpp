@@ -64,63 +64,78 @@ void SendResetState(const int duration) {
     close(fd);
 }
 
+int UnblockFodStatus() {
+    int fd, ret, status;
+
+    fd = open(fodStatusPath, O_RDWR | O_NONBLOCK);
+    ret = read(fd, &status, sizeof(status));
+
+    if (ret < 0) {
+        goto out;
+    }
+
+    if (!status) {
+        LOG(INFO) << "FOD Touch listener is disabled, enabling.";
+        status = 1;
+        write(fd, &status, 1);
+    }
+
+out:
+    close(fd);
+    return ret;
+}
+
 void Listen(const std::string& eventPath, const ListenerCallback& callback) {
-    char fodstat;
-    int fodstatfd, evfd, fblank, fblankfd;
-    pollfd pfd;
+    int fdTouch, fdBlank, ret;
+    pollfd pfdTouch, pfdBlank;
     input_event ev;
 
-    evfd = open(eventPath.c_str(), O_RDONLY | O_NONBLOCK);
-    fodstatfd = open(fodStatusPath, O_RDWR | O_NONBLOCK);
-    fblankfd = open(fblankPath, O_RDONLY | O_NONBLOCK);
+    fdTouch = open(eventPath.c_str(), O_RDONLY | O_NONBLOCK);
+    pfdTouch.fd = fdTouch;
+    pfdTouch.events = POLLIN;
+    pfdTouch.revents = 0;
 
-    pfd.fd = evfd;
-    pfd.events = POLLIN;
-    pfd.revents = 0;
+    fdBlank = open(fblankPath, O_RDONLY | O_NONBLOCK);
+    pfdBlank.fd = fdBlank;
+    pfdBlank.events = POLLIN;
+    pfdBlank.revents = 0;
 
     while (true) {
         usleep(10000);
-        if (lseek(fblankfd, 0, SEEK_SET) != -1) {
-            if (read(fblankfd, &fblank, sizeof(fblank)) < 0) {
+
+        // wait for screen off
+        poll(&pfdBlank, 1, -1);
+        if (pfdBlank.revents & POLLIN) {
+            if (read(pfdBlank.fd, &ret, sizeof(ret)) < 0) {
                 LOG(ERROR) << "Unable to read blank state, exiting.";
                 goto out;
             }
-            if (fblank <= FB_BLANK_NORMAL) {
+            if (ret <= FB_BLANK_NORMAL) {
                 usleep(100000);
                 continue;
             }
         }
 
         // unblock touch listener by enabling fod_status
-        if (lseek(fodstatfd, 0, SEEK_SET) != -1) {
-            if (read(fodstatfd, &fodstat, 1) < 0) {
-                LOG(ERROR) << "Unable to read fod_status, exiting.";
-                goto out;
-            }
-            if (fodstat == '0') {
-                LOG(INFO) << "FOD Touch listener is disabled, enabling.";
-                fodstat = '1';
-                write(fodstatfd, &fodstat, 1);
-            }
-        }
-
-        poll(&pfd, 1, -1);
-        if (!(pfd.revents & POLLIN)) {
-            continue;
-        }
-
-        if (read(pfd.fd, &ev, sizeof(ev)) != sizeof(ev)) {
-            LOG(ERROR) << "Invalid event size, exiting.";
+        ret = UnblockFodStatus();
+        if (ret < 0) {
+            LOG(ERROR) << "Unable to read fod_status, exiting.";
             goto out;
         }
 
-        callback(ev);
+        poll(&pfdTouch, 1, -1);
+        if (pfdTouch.revents & POLLIN) {
+            if (read(pfdTouch.fd, &ev, sizeof(ev)) != sizeof(ev)) {
+                LOG(ERROR) << "Invalid event size, exiting.";
+                goto out;
+            }
+            callback(ev);
+        }
     }
 
 out:
-    close(fodstatfd);
-    close(fblankfd);
-    close(evfd);
+    close(fdBlank);
+    close(fdTouch);
 }
 
 } // namespace gfscreenoffd
