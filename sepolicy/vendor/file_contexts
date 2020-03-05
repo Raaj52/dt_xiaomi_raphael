@@ -16,6 +16,8 @@
 # FOD
 /sys/devices/platform/soc/soc:qcom,dsi-display-primary/fod_hbm                                         u:object_r:sysfs_fod:s0
 /sys/devices/virtual/touch/tp_dev/fod_status                                                           u:object_r:sysfs_fod:s0
+/sys/devices/virtual/touch/tp_dev/fod_test                                                             u:object_r:sysfs_fod:s0
+/(system|vendor)/bin/gfscreenoffd                                                                      u:object_r:gfscreenoffd_exec:s0
 
 # HALs
 /vendor/bin/hw/android\.hardware\.light@2\.0-service\.xiaomi_msmnile                                   u:object_r:hal_light_default_exec:s0
