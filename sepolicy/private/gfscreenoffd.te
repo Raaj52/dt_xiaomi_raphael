@@ -1,0 +1,12 @@
+type gfscreenoffd, domain;
+type gfscreenoffd_exec, exec_type, file_type;
+
+init_daemon_domain(gfscreenoffd)
+
+r_dir_file(gfscreenoffd, sysfs_graphics)
+
+allow gfscreenoffd input_device:chr_file rw_file_perms;
+allow gfscreenoffd input_device:dir r_dir_perms;
+allow gfscreenoffd sysfs_tp_fodstatus:file rw_file_perms;
+allow gfscreenoffd system_file:file { entrypoint open read execute getattr map };
+allow gfscreenoffd uhid_device:chr_file rw_file_perms;

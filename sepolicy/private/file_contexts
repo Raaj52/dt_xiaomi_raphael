@@ -1,3 +1,6 @@
+# Binaries
+/(vendor|system/vendor)/bin/gfscreenoffd u:object_r:gfscreenoffd_exec:s0
+
 # Files in rootfs
 /bt_firmware(/.*)?       u:object_r:bt_firmware_file:s0
 /dsp(/.*)?               u:object_r:adsprpcd_file:s0
@@ -9,6 +12,7 @@
 
 # Fingerprint nodes
 /sys/devices/virtual/touch/tp_dev/fod_status    u:object_r:sysfs_tp_fodstatus:s0
+/sys/devices/virtual/touch/tp_dev/fod_test      u:object_r:sysfs_tp_fodstatus:s0
 
 # HALs
 /(product|system/product)/vendor_overlay/[0-9]+/bin/hw/android\.hardware.power@1\.2-service                    u:object_r:hal_power_default_exec:s0
@@ -19,4 +23,3 @@
 /(product|system/product)/vendor_overlay/[0-9]+/etc/perf(/.*)?      u:object_r:vendor_configs_file:s0
 /(product|system/product)/vendor_overlay/[0-9]+/lib(64)?/hw    u:object_r:vendor_hal_file:s0
 /(product|system/product)/vendor_overlay/[0-9]+/bin\.qcom\.post_boot\.sh   u:object_r:qti_init_shell_exec:s0
-
