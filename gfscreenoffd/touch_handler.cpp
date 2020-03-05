@@ -4,6 +4,7 @@
 #include "touch_handler.h"
 
 #include <android-base/logging.h>
+#include <dirent.h>
 #include <fcntl.h>
 #include <linux/fb.h>
 #include <linux/input.h>
@@ -28,23 +29,24 @@ void Send(int fd, int type, int code, int value) {
 }
 
 std::string FindTouchEv() {
-    const char eventPathStart[] = "/dev/input/event";
-    int fd;
+    DIR* evd;
+    int fd, eventTotal = 0;
     unsigned long evbit;
 
-    for (int i = 0; i < 10; i++) {
-        std::string f(eventPathStart + std::to_string(i));
-        if (f.compare(0, sizeof(eventPathStart) - 1, eventPathStart) == 0 &&
-            access(f.c_str(), F_OK) != -1) {
+    evd = opendir("/dev/input");
+    while (readdir(evd)) eventTotal++;
+    closedir(evd);
+
+    for (int i = 0; i <= eventTotal; i++) {
+        std::string f("/dev/input/event" + std::to_string(i));
+        if (access(f.c_str(), F_OK) != -1) {
             fd = open(f.c_str(), O_RDONLY | O_NONBLOCK);
             ioctl(fd, EVIOCGBIT(0, sizeof(evbit)), &evbit);
-
             if (evbit & (1 << EV_KEY) && evbit & (1 << EV_ABS)) {
                 LOG(INFO) << "Found the touchscreen device at : " << f.c_str();
                 close(fd);
                 return f;
             }
-
             close(fd);
         }
     }
