@@ -18,7 +18,7 @@ using namespace vendor::chaldeastudio::gfscreenoffd;
 
 int main() {
     auto lastdown = std::chrono::high_resolution_clock::now();
-    int ret, ufd;
+    int ret, ufd, pressed;
     std::string touchEventPath;
     struct uinput_user_dev udev;
 
@@ -57,14 +57,15 @@ int main() {
     }
 
     // listening to finger area touch and then sending virtual key
-    Listen(touchEventPath.c_str(), [&lastdown, &ufd](const input_event& ev) {
+    Listen(touchEventPath.c_str(), [&pressed, &lastdown, &ufd](const input_event& ev) {
         auto now = std::chrono::high_resolution_clock::now();
         double delta = std::chrono::duration<double, std::milli>(now - lastdown).count();
 
-        if (delta > 1000.0 && ev.code == KEY_FOD_SCRNOFF_DOWN && ev.value == 1) {
+        if ((pressed < 1 || delta > 1000.0) && ev.code == KEY_FOD_SCRNOFF_DOWN && ev.value == 1) {
             Send(ufd, EV_KEY, KEY_FOD_GESTURE_DOWN, 1);
             Send(ufd, EV_KEY, KEY_FOD_GESTURE_DOWN, 0);
             Send(ufd, EV_SYN, SYN_REPORT, 0);
+            pressed++;
             lastdown = std::chrono::high_resolution_clock::now();
             SendResetState(400);
         }
