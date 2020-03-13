@@ -5,10 +5,16 @@
 
 #include <linux/input.h>
 
-#include <functional>
+#include <chrono>
+#include <string>
 
+// keyCode from kernel to detect pressed fp
 #define KEY_FOD_SCRNOFF_DOWN 325
+// keyCode that will be fired for client side (DeviceKeyHandler)
 #define KEY_FOD_GESTURE_DOWN 745
+// time delay before resetting touch state
+// usually waiting for doze.pulse launch to be done
+#define TOUCH_RESET_DELAY_MS 350
 
 static constexpr const char* fodStatusPath = "/sys/devices/virtual/touch/tp_dev/fod_status";
 static constexpr const char* fodTestPath = "/sys/devices/virtual/touch/tp_dev/fod_test";
@@ -18,12 +24,19 @@ namespace vendor {
 namespace chaldeastudio {
 namespace gfscreenoffd {
 
-using ListenerCallback = std::function<void(const input_event&)>;
+class TouchHandler {
+public:
+    TouchHandler(const int& fd);
+    void startListener();
+    void releasePendingTouch(const int duration);
+    void sendEvent(int fd, int type, int code, int value);
 
-std::string FindTouchEv();
-void Listen(const std::string& eventPath, const ListenerCallback& callback);
-void Send(int fd, int type, int code, int value);
-void SendResetState(const int duration);
+private:
+    int mAreaPressed;
+    int mVirtualInput;
+    std::chrono::time_point<std::chrono::high_resolution_clock> mLastTouch;
+    std::string mTouchEventPath;
+};
 
 } // namespace gfscreenoffd
 } // namespace chaldeastudio
