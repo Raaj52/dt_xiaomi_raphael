@@ -34,7 +34,7 @@ public:
 private:
     int mAreaPressed;
     int mVirtualInput;
-    std::chrono::time_point<std::chrono::high_resolution_clock> mLastTouch;
+    std::chrono::time_point<std::chrono::system_clock> mLastTouch;
     std::string mTouchEventPath;
 };
 
