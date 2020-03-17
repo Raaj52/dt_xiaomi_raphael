@@ -66,7 +66,7 @@ out:
 
 TouchHandler::TouchHandler(const int& fd) {
     mAreaPressed = 0;
-    mLastTouch = std::chrono::high_resolution_clock::now();
+    mLastTouch = std::chrono::system_clock::now();
     mTouchEventPath = FindTouchEv();
     mVirtualInput = fd;
 }
@@ -99,7 +99,7 @@ void TouchHandler::startListener() {
     input_event ev;
     int fdTouch, fdBlank, ret = 0;
     pollfd pfds[2];
-    std::chrono::time_point<std::chrono::high_resolution_clock> now;
+    std::chrono::time_point<std::chrono::system_clock> now;
 
     if (mTouchEventPath.empty()) {
         LOG(ERROR) << "No touchscreen detected, exiting.";
@@ -118,6 +118,7 @@ void TouchHandler::startListener() {
 
     LOG(INFO) << "Listening touchscreen";
     while (true) {
+        usleep(10000);
         poll(pfds, 2, -1);
 
         // wait for screen off
@@ -146,14 +147,14 @@ void TouchHandler::startListener() {
             }
 
             if (ev.code == KEY_FOD_SCRNOFF_DOWN && ev.value == 1) {
-                now = std::chrono::high_resolution_clock::now();
+                now = std::chrono::system_clock::now();
                 delta = std::chrono::duration<double, std::milli>(now - mLastTouch).count();
                 if (mAreaPressed < 1 || delta > ((TOUCH_RESET_DELAY_MS / 2) * 3)) {
                     sendEvent(mVirtualInput, EV_KEY, KEY_FOD_GESTURE_DOWN, 1);
                     sendEvent(mVirtualInput, EV_KEY, KEY_FOD_GESTURE_DOWN, 0);
                     sendEvent(mVirtualInput, EV_SYN, SYN_REPORT, 0);
                     mAreaPressed++;
-                    mLastTouch = std::chrono::high_resolution_clock::now();
+                    mLastTouch = std::chrono::system_clock::now();
                     releasePendingTouch(TOUCH_RESET_DELAY_MS);
                 }
             }
