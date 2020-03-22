@@ -28,7 +28,6 @@ import androidx.preference.PreferenceManager;
 import org.chaldeastudio.deviceparts.dirac.DiracUtils;
 import org.chaldeastudio.deviceparts.doze.DozeUtils;
 import org.chaldeastudio.deviceparts.popupcamera.PopupCameraUtils;
-import org.chaldeastudio.deviceparts.fod.FodUtils;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 
@@ -47,7 +46,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         }
         new DiracUtils(context).onBootCompleted();
         PopupCameraUtils.startService(context);
-        FodUtils.startService(context);
 
         boolean fodScreenOffState = sharedPrefs.getBoolean(FOD_SCREENOFF_ENABLE_KEY, false);
         SystemProperties.set(FOD_SCRNOFFD_PROP, fodScreenOffState ? "1" : "0");
