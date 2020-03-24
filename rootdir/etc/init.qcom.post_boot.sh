@@ -239,6 +239,13 @@ echo 10 > /proc/sys/vm/dirty_background_ratio
 echo 3000 > /proc/sys/vm/dirty_expire_centisecs
 echo 32768 > /proc/sys/vm/min_free_kbytes
 
+# Setup final blkio
+# value for group_idle is us
+echo 1000 > /dev/blkio/blkio.weight
+echo 100 > /dev/blkio/background/blkio.weight
+echo 2000 > /dev/blkio/blkio.group_idle
+echo 0 > /dev/blkio/background/blkio.group_idle
+
 # Parse misc partition path and set property
 misc_link=$(ls -l /dev/block/bootdevice/by-name/misc)
 setprop persist.vendor.mmi.misc_dev_path ${misc_link##*>}
