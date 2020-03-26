@@ -28,12 +28,29 @@ import androidx.preference.SwitchPreference;
 
 import org.lineageos.settings.R;
 
-public class FodSettingsFragment extends PreferenceFragment {
+public class FodSettingsFragment extends PreferenceFragment implements
+        OnPreferenceChangeListener {
+
+    private SwitchPreference mFodScreenOffPreference;
+    private static final String FOD_SCREENOFF_ENABLE_KEY = "fod_screenoff_enable";
+    private static final String FOD_SCRNOFFD_PROP = "persist.sys.gfscreenoffd.run";
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.fod_settings);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mFodScreenOffPreference = (SwitchPreference) findPreference(FOD_SCREENOFF_ENABLE_KEY);
+        mFodScreenOffPreference.setEnabled(true);
+        mFodScreenOffPreference.setOnPreferenceChangeListener(this);
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (FOD_SCREENOFF_ENABLE_KEY.equals(preference.getKey())) {
+            enableFodScreenOff((Boolean) newValue);
+        }
+        return true;
     }
 
     @Override
@@ -44,4 +61,12 @@ public class FodSettingsFragment extends PreferenceFragment {
         }
         return false;
     }
+
+    private void enableFodScreenOff(boolean enable) {
+        boolean running = SystemProperties.getInt(FOD_SCRNOFFD_PROP, 0) != 0;
+
+        if (enable && running) return;
+        SystemProperties.set(FOD_SCRNOFFD_PROP, enable ? "1" : "0");
+    }
+
 }
