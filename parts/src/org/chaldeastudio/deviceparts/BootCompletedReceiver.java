@@ -20,14 +20,12 @@ package org.chaldeastudio.deviceparts;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.UserHandle;
 import android.util.Log;
 
 import org.chaldeastudio.deviceparts.dirac.DiracUtils;
 import org.chaldeastudio.deviceparts.doze.DozeUtils;
 import org.chaldeastudio.deviceparts.popupcamera.PopupCameraUtils;
 import org.chaldeastudio.deviceparts.fod.FodUtils;
-import org.chaldeastudio.deviceparts.fod.FodScreenOffService;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 
@@ -43,7 +41,5 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         new DiracUtils(context).onBootCompleted();
         PopupCameraUtils.startService(context);
         FodUtils.startService(context);
-        context.startServiceAsUser(new Intent(context, FodScreenOffService.class),
-                UserHandle.CURRENT);
     }
 }
