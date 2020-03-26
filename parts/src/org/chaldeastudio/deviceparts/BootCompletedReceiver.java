@@ -20,7 +20,10 @@ package org.chaldeastudio.deviceparts;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.SystemProperties;
 import android.util.Log;
+import androidx.preference.PreferenceManager;
 
 import org.chaldeastudio.deviceparts.dirac.DiracUtils;
 import org.chaldeastudio.deviceparts.doze.DozeUtils;
@@ -31,9 +34,13 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
     private static final boolean DEBUG = false;
     private static final String TAG = "XiaomiParts";
+    private static final String FOD_SCREENOFF_ENABLE_KEY = "fod_screenoff_enable";
+    private static final String FOD_SCRNOFFD_PROP = "persist.sys.gfscreenoffd.run";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
         if (DozeUtils.isDozeEnabled(context) && DozeUtils.sensorsEnabled(context)) {
             if (DEBUG) Log.d(TAG, "Starting Doze service");
             DozeUtils.startService(context);
@@ -41,5 +48,8 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         new DiracUtils(context).onBootCompleted();
         PopupCameraUtils.startService(context);
         FodUtils.startService(context);
+
+        boolean fodScreenOffState = sharedPrefs.getBoolean(FOD_SCREENOFF_ENABLE_KEY, false);
+        SystemProperties.set(FOD_SCRNOFFD_PROP, fodScreenOffState ? "1" : "0");
     }
 }
