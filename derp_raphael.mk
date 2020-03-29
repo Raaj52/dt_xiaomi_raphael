@@ -29,11 +29,14 @@ TARGET_MINIMAL_APPS := false
 PRODUCT_NAME := derp_raphael
 PRODUCT_DEVICE := raphael
 PRODUCT_BRAND := Xiaomi
-PRODUCT_MODEL := MI 9T Pro
+PRODUCT_MODEL := Redmi K20 Pro
 PRODUCT_MANUFACTURER := Xiaomi
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRODUCT_NAME="raphael" \
-    TARGET_DEVICE="raphael"
+    TARGET_DEVICE="raphael" \
+    PRIVATE_BUILD_DESC="walleye-user 8.1.0 OPM1.171019.021 4565141 release-keys"
+
+BUILD_FINGERPRINT := google/walleye/walleye:8.1.0/OPM1.171019.021/4565141:user/release-keys
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
