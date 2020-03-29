@@ -22,9 +22,14 @@
 
 #include <fstream>
 
+#define BLUE_LED        "/sys/class/leds/blue/"
+#define GREEN_LED       "/sys/class/leds/green/"
 #define LCD_LED         "/sys/class/backlight/panel0-backlight/"
 
 #define BRIGHTNESS      "brightness"
+#define BREATH          "breath"
+#define DELAY_OFF       "delay_off"
+#define DELAY_ON        "delay_on"
 
 #define MAX_LED_BRIGHTNESS    255
 #define MAX_LCD_BRIGHTNESS    2047
@@ -86,6 +91,29 @@ static void handleBacklight(const LightState& state) {
     set(LCD_LED BRIGHTNESS, brightness);
 }
 
+static void handleLED(const LightState& state) {
+    uint32_t brightness = getScaledBrightness(state, MAX_LED_BRIGHTNESS);
+
+    /* Reset the lights first */
+    set(BLUE_LED BREATH, 0);
+    set(BLUE_LED DELAY_OFF, 0);
+    set(BLUE_LED DELAY_ON, 0);
+    set(GREEN_LED BREATH, 0);
+    set(GREEN_LED DELAY_OFF, 0);
+    set(GREEN_LED DELAY_ON, 0);
+
+    if (state.flashMode == Flash::HARDWARE) {
+        set(BLUE_LED BREATH, 1);
+        set(GREEN_LED BREATH, 1);
+    } else if (state.flashMode == Flash::TIMED) {
+        set(BLUE_LED DELAY_OFF, state.flashOnMs);
+        set(GREEN_LED DELAY_OFF, state.flashOnMs);
+    } else {
+        set(BLUE_LED BRIGHTNESS, brightness);
+        set(GREEN_LED BRIGHTNESS, brightness);
+    }
+}
+
 static inline bool isStateLit(const LightState& state) {
     return state.color & 0x00ffffff;
 }
@@ -103,6 +131,9 @@ static inline bool isStateEqual(const LightState& first, const LightState& secon
 
 /* Keep sorted in the order of importance. */
 static std::vector<LightBackend> backends = {
+    { Type::ATTENTION, handleLED },
+    { Type::NOTIFICATIONS, handleLED },
+    { Type::BATTERY, handleLED },
     { Type::BACKLIGHT, handleBacklight },
 };
 
