@@ -53,13 +53,12 @@ public:
     Return<void> setCallback(const sp<IFingerprintInscreenCallback>& callback) override;
 
 private:
-    bool mFodCircleVisible;
     sp<IXiaomiFingerprint> xiaomiFingerprintService;
 };
 
 }  // namespace implementation
 }  // namespace V1_0
-}  // namespace inscreenx
+}  // namespace inscreen
 }  // namespace fingerprint
 }  // namespace biometrics
 }  // namespace lineage
