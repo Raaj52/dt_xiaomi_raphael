@@ -28,6 +28,7 @@ import androidx.preference.PreferenceManager;
 import org.lineageos.settings.dirac.DiracUtils;
 import org.lineageos.settings.doze.DozeUtils;
 import org.lineageos.settings.popupcamera.PopupCameraUtils;
+import org.lineageos.settings.utils.FileUtils;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 
@@ -35,6 +36,8 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     private static final String TAG = "XiaomiParts";
     private static final String FOD_SCREENOFF_ENABLE_KEY = "fod_screenoff_enable";
     private static final String FOD_SCRNOFFD_PROP = "persist.sys.gfscreenoffd.run";
+    private static final String DC_DIMMING_ENABLE_KEY = "dc_dimming_enable";
+    private static final String DC_DIMMING_NODE = "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/msm_fb_ea_enable";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -47,5 +50,10 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
         boolean fodScreenOffState = sharedPrefs.getBoolean(FOD_SCREENOFF_ENABLE_KEY, false);
         SystemProperties.set(FOD_SCRNOFFD_PROP, fodScreenOffState ? "1" : "0");
+
+        boolean dcDimmingEnabled = sharedPrefs.getBoolean(DC_DIMMING_ENABLE_KEY, false);
+        try {
+            FileUtils.writeLine(DC_DIMMING_NODE, dcDimmingEnabled ? "1" : "0");
+        } catch(Exception e) {}
     }
 }
