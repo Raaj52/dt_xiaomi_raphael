@@ -55,5 +55,13 @@ void property_override_dual(char const system_prop[], char const vendor_prop[],
 
 void vendor_load_properties()
 {
-    // stub
+    std::string region = android::base::GetProperty("ro.boot.hwc", "");
+
+    // correct model naming
+    if (region.find("CN") != std::string::npos ||
+        region.find("INDIA") != std::string::npos) {
+        property_override("ro.product.model", "Redmi K20 Pro");
+    } else {
+        property_override("ro.product.model", "Mi 9T Pro");
+    }
 }
