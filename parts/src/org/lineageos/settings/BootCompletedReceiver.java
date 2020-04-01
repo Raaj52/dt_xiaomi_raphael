@@ -52,8 +52,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         SystemProperties.set(FOD_SCRNOFFD_PROP, fodScreenOffState ? "1" : "0");
 
         boolean dcDimmingEnabled = sharedPrefs.getBoolean(DC_DIMMING_ENABLE_KEY, false);
-        try {
-            FileUtils.writeLine(DC_DIMMING_NODE, dcDimmingEnabled ? "1" : "0");
-        } catch(Exception e) {}
+        FileUtils.writeLine(DC_DIMMING_NODE, dcDimmingEnabled ? "1" : "0");
     }
 }
