@@ -261,7 +261,7 @@ PRODUCT_COPY_FILES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.xiaomi_msmnile
+    android.hardware.light@2.0-service.xiaomi_raphael
 
 # Media
 PRODUCT_PACKAGES += \
@@ -341,17 +341,13 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libprotobuf-cpp-full-rtti
 
-# PixelLiveWallpaper
-PRODUCT_PACKAGES += \
-    PixelLiveWallpaperPrebuilt
-
 # Perf
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/perfconfigstore.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perfconfigstore.xml
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.2-service.xiaomi_msmnile
+    android.hardware.power@1.2-service.xiaomi_raphael
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/power/config/msmnile/powerhint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.xml
