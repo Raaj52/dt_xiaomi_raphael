@@ -228,6 +228,7 @@ PRODUCT_BOOT_JARS += \
 
 # Init
 PRODUCT_PACKAGES += \
+    init.anxfilecheck.sh \
     init.qcom.post_boot.sh \
     init.qcom.rc \
     init.qcom.sh \

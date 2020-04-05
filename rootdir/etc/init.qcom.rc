@@ -233,6 +233,11 @@ on post-fs-data
 
     setprop vold.post_fs_data_done 1
 
+service anxfilecheck /vendor/bin/init.anxfilecheck.sh
+    class main
+    user root
+    group root
+
 service vendor.ssr_setup /vendor/bin/ssr_setup
     oneshot
 
@@ -240,6 +245,7 @@ on property:sys.boot_completed=1
     chown media audio /sys/kernel/wdsp0/boot
 
     start qcom-post-boot
+    start anxfilecheck
 
 service vendor.qrtr-ns /vendor/bin/qrtr-ns -f
     class core
