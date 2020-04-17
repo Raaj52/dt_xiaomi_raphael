@@ -6,6 +6,8 @@
 
 # Display
 /sys/devices/platform/soc/soc:qcom,dsi-display-primary/msm_fb_ea_enable                                u:object_r:sysfs_dm:s0
+/sys/class/drm/card0-DSI-1/disp_param                                                                  u:object_r:sysfs_graphics:s0
+/sys/class/backlight/panel0-backlight/brightness                                                       u:object_r:sysfs_graphics:s0
 
 # Fingerprint
 /dev/goodix_fp                                                                                         u:object_r:fingerprint_device:s0
