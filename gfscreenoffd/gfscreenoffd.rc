@@ -38,4 +38,3 @@ service gfscreenoffd /system/bin/gfscreenoffd
     class late_start
     user root
     group root system uhid
-    seclabel u:r:gfscreenoffd:s0
