@@ -4,9 +4,11 @@
 
 ANX_DIR="/sdcard/.ANXCamera/"
 
-if [ -d $ANX_DIR ]; then
-	exit 0
-else
+while true; do
+	test -w /sdcard && break || sleep 1
+done
+
+if [ ! -d $ANX_DIR ]; then
 	mkdir -p /sdcard/.ANXCamera/cheatcodes/
 	cp -R /system/etc/ANXCamera/cheatcodes/* /sdcard/.ANXCamera/cheatcodes/
 	mkdir -p /sdcard/.ANXCamera/cheatcodes_reference/
