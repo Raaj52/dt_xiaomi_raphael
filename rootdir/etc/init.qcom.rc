@@ -234,9 +234,11 @@ on post-fs-data
     setprop vold.post_fs_data_done 1
 
 service anxfilecheck /vendor/bin/init.anxfilecheck.sh
-    class main
+    class late_start
     user root
     group root
+    disabled
+    oneshot
 
 service vendor.ssr_setup /vendor/bin/ssr_setup
     oneshot
