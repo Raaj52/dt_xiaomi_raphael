@@ -1,20 +1,13 @@
 #!/vendor/bin/sh
 #
-# A simple script that checks if the anx directories are present
+# A simple script that prepare ANX Camera required files
 
-ANX_DIR="/sdcard/.ANXCamera/"
+ANX="/sdcard/.ANXCamera"
 
 while true; do
 	test -w /sdcard && break || sleep 1
 done
 
-if [ ! -d $ANX_DIR ]; then
-	mkdir -p /sdcard/.ANXCamera/cheatcodes/
-	cp -R /system/etc/ANXCamera/cheatcodes/* /sdcard/.ANXCamera/cheatcodes/
-	mkdir -p /sdcard/.ANXCamera/cheatcodes_reference/
-	cp -R /system/etc/ANXCamera/cheatcodes/* /sdcard/.ANXCamera/cheatcodes_reference/
-	mkdir -p /sdcard/.ANXCamera/features/
-	cp -R /system/etc/device_features/* /sdcard/.ANXCamera/features/
-	mkdir -p /sdcard/.ANXCamera/features_reference/
-	cp -R /system/etc/device_features/* /sdcard/.ANXCamera/features_reference/
-fi
+mkdir -p $ANX/cheatcodes{,_reference} $ANX/features{,_reference}
+echo -n $ANX/cheatcodes{,_reference}/ | xargs -n 1 cp -f /system/etc/ANXCamera/cheatcodes/.
+echo -n $ANX/features{,_reference}/ | xargs -n 1 cp -f /system/etc/device_features/.
