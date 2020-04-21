@@ -50,11 +50,6 @@ function configure_memory_parameters() {
     # Set allocstall_threshold to 0 for all targets.
     #
 
-    # Set Zram disk size=1GB for >=2GB Non-Go targets.
-    echo 1073741824 > /sys/block/zram0/disksize
-    mkswap /dev/block/zram0
-    swapon /dev/block/zram0 -p 32758
-
     # Read adj series and set adj threshold for PPR and ALMK.
     # This is required since adj values change from framework to framework.
     adj_series=`cat /sys/module/lowmemorykiller/parameters/adj`
@@ -87,9 +82,7 @@ function configure_memory_parameters() {
     echo 1 > /sys/module/lowmemorykiller/parameters/oom_reaper
 
     # Set allocstall_threshold to 0 for all targets.
-    # Set swappiness to 100 for all targets
     echo 0 > /sys/module/vmpressure/parameters/allocstall_threshold
-    echo 100 > /proc/sys/vm/swappiness
 
     configure_read_ahead_kb_values
 }
