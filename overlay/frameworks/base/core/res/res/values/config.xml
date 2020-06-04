@@ -554,5 +554,8 @@
         <item>264</item>
         <item>265</item>
     </integer-array>
+
+    <!-- If this is true, the screen will fade off. -->
+    <bool name="config_animateScreenLights">true</bool>
 </resources>
 
