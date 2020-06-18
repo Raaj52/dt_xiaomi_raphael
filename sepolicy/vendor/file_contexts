@@ -14,6 +14,7 @@
 /data/vendor/goodix(/.*)?                                                                              u:object_r:fingerprint_data_file:s0
 
 # FOD
+/sys/devices/platform/soc/soc:qcom,dsi-display-primary/fod_ui                                          u:object_r:sysfs_fod:s0
 /sys/devices/virtual/touch/tp_dev/fod_status                                                           u:object_r:sysfs_fod:s0
 /sys/devices/virtual/touch/tp_dev/fod_test                                                             u:object_r:sysfs_fod:s0
 /(system|vendor)/bin/gfscreenoffd                                                                      u:object_r:gfscreenoffd_exec:s0
