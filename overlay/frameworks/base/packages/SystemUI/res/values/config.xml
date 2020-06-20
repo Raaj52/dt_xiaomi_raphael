@@ -26,4 +26,7 @@
 
     <bool name="config_vibrateOnIconAnimation">true</bool>
 
+    <!-- Allow devices to hide black gradient behind QS Panel -->
+    <bool name="config_hideQSBlackGradient">true</bool>
+
 </resources>
