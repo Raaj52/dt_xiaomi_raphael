@@ -19,8 +19,6 @@
 uint32_t getFodZOrder(uint32_t z, bool touched) {
     if (!touched) {
         z |= 0x1000000;
-    } else {
-        z |= 0x3000000;
     }
     return z;
 }
