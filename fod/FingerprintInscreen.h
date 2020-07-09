@@ -58,6 +58,9 @@ class FingerprintInscreen : public IFingerprintInscreen {
     sp<IDisplayFeature> xiaomiDisplayFeatureService;
     sp<IXiaomiFingerprint> xiaomiFingerprintService;
 
+    std::mutex mCallbackLock;
+    sp<IFingerprintInscreenCallback> mCallback;
+
     // android system properties
     static constexpr const char* propFODOffset = "persist.vendor.sys.fp.fod.location.X_Y";
     static constexpr const char* propFODSize = "persist.vendor.sys.fp.fod.size.width_height";
