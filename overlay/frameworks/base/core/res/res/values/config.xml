@@ -566,7 +566,7 @@
     </integer-array>
 
     <!-- If this is true, the screen will fade off. -->
-    <bool name="config_animateScreenLights">true</bool>
+    <bool name="config_animateScreenLights">false</bool>
 	
     <!-- Enable pocket mode -->
     <bool name="config_proxiSensorWakupCheck">true</bool> 
