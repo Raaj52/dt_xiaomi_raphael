@@ -58,12 +58,8 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_CLANG_COMPILE := true
 TARGET_KERNEL_CONFIG := raphael_defconfig
 TARGET_KERNEL_SOURCE := kernel/xiaomi/raphael
-ifneq ($(wildcard prebuilts/clang/host/linux-x86/clang-avalon),)
-  TARGET_KERNEL_CLANG_VERSION := avalon
-else
-  # Find latest one
-  TARGET_KERNEL_CLANG_VERSION := $(shell sh -c "find prebuilts/clang/host/linux-x86/ -type f -name clang -printf \"%T@ %Tc %p\n\" | sort -n | tail -n1 | sed 's/.*clang-\(.*\)\/bin.*/\1/'")
-endif
+TARGET_KERNEL_CLANG_VERSION := proton
+
 
 # Enable real time lockscreen charging current values
 BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
