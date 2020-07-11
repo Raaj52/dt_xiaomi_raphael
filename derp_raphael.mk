@@ -9,6 +9,9 @@ $(call inherit-product, device/xiaomi/raphael/device.mk)
 # Inherit some common AOSiP stuff.
 $(call inherit-product, vendor/aosip/config/common_full_phone.mk)
 
+# Inherit PSU
+$(call inherit-product-if-exists, vendor/google/psu/google-psu.mk)
+
 # Official-ify
 DERP_BUILDTYPE := Official
 
