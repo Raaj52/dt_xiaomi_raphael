@@ -16,10 +16,6 @@
 	
     <!-- Doze: does this device support STATE_DOZE?  -->
     <bool name="doze_display_state_supported">true</bool>
-
-    <!-- Whether the binned brightness sensor reports a value of 0 on proximity
-         near events -->
-    <bool name="doze_brightness_sensor_reports_proximity" translatable="false">false</bool>
 	
     <!-- The CPU temperature sensor path, defaults to empty -->
     <string name="config_cpuTempSensor" translatable="false">/sys/class/thermal/thermal_zone0/temp</string>

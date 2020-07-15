@@ -543,10 +543,6 @@
     <!-- Whether device supports double tap to wake -->
     <bool name="config_supportDoubleTapWake">true</bool>
 
-    <!-- True if the display hardware only has brightness buckets rather than a full range of
-         backlight values -->
-    <bool name="config_displayBrightnessBucketsInDoze">true</bool>
-
     <!-- Indicates that connected MAC randomization is supported on this device -->
     <bool translatable="false" name="config_wifi_connected_mac_randomization_supported">true</bool>
 
