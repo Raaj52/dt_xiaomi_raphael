@@ -263,10 +263,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service.xiaomi_raphael
 
-# Prebuilt Packages
-PRODUCT_PACKAGES += \
-    GCamGo
-
 # Media
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
