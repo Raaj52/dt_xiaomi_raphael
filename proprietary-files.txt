@@ -671,7 +671,7 @@ vendor/lib64/libspcom.so
 vendor/lib64/vendor.qti.hardware.data.latency@1.0.so
 vendor/lib64/vendor.qti.latency@2.0.so
 
-# Listen - from LA.UM.8.1.r1-15100-sm8150.0
+# Listen - from LA.UM.8.1.r1-15600-sm8150.0
 vendor/lib/hw/sound_trigger.primary.msmnile.so|594df3720b6d8e1b5d8b306242a2adb7ee4f8658
 vendor/lib/libadpcmdec.so|3edd1c7ca6e5614f907d74032fb2ae24c738b857
 vendor/lib/libgcs-calwrapper.so|f35026f2c1a16d10b642914210e47711872815be
