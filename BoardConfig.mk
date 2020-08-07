@@ -90,6 +90,7 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 
 # Camera
 TARGET_USES_QTI_CAMERA_DEVICE := true
+USE_DEVICE_SPECIFIC_CAMERA := true
 
 # Display
 TARGET_USES_ION := true
@@ -217,4 +218,5 @@ WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # Inherit from the proprietary version
+include vendor/MiuiCamera/common/BoardConfigVendor.mk
 -include vendor/xiaomi/raphael/BoardConfigVendor.mk
