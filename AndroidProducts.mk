@@ -5,9 +5,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/derp_raphael.mk
+    $(LOCAL_DIR)/streak_raphael.mk
 
 COMMON_LUNCH_CHOICES := \
-    derp_raphael-user \
-    derp_raphael-userdebug \
-    derp_raphael-eng
+    streak_raphael-user \
+    streak_raphael-userdebug \
+    streak_raphael-eng
