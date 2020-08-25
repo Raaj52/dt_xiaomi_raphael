@@ -111,6 +111,7 @@ BOARD_HAVE_QCOM_FM := true
 
 # FOD
 TARGET_SURFACEFLINGER_FOD_LIB := //$(DEVICE_PATH):libfod_extension.xiaomi_raphael
+TARGET_USES_FOD_ZPOS := true
 
 # GPS
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
